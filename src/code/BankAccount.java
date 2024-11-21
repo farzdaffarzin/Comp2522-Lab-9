@@ -46,6 +46,7 @@ public class BankAccount {
     public void transferToBank(final BankAccount account,
                                final String number,
                                final int amount) {
+
         if(!account.getAccountNumber().equals(number)){
             throw new IllegalArgumentException("Account number does not match");
         }
@@ -62,7 +63,8 @@ public class BankAccount {
 
     @Override
     public String toString(){
-        return "BankAccount [accountNumber=" +
-                accountNumber + ", balance=" + balance + "]";
+        String bankInfo = "BankAccount [accountNumber=" +
+                accountNumber + ", balance=" + balance + "]";;
+        return bankInfo;
     }
 }
