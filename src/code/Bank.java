@@ -3,7 +3,11 @@ import java.util.List;
 
 public class Bank {
 
-    private final List<BankAccount> accounts = new ArrayList<BankAccount>();
+    private final List<BankAccount> accounts;
+
+    public Bank(){
+        accounts = new ArrayList<BankAccount>();
+    }
 
     void addAccount(BankAccount account1) {
         accounts.add(account1);
