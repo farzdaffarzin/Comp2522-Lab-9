@@ -11,14 +11,21 @@ public class BankAccount {
         return balance;
     }
 
-    public BankAccount(String number, int balance) {
+    public BankAccount(final String number, int balance) {
         validateBankID(number);
+
+        if(balance < 0){
+            throw new IllegalArgumentException("Balance cannot be negative");
+        }
 
         this.accountNumber = number;
         this.balance = balance;
     }
 
-    public void deposit(int amount) {
+    public void deposit(final int amount) {
+        if(amount < 0){
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
         balance += amount;
     }
 
@@ -26,23 +33,36 @@ public class BankAccount {
         return balance;
     }
 
-    public void withdraw(int amount) {
-        if(amount > balance) {
+    public void withdraw(final int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive");
+        }
+        if (amount > balance) {
             throw new IllegalArgumentException("Insufficient funds");
         }
         balance -= amount;
     }
 
-    public void transferToBank(BankAccount account, String number, int amount) {
-        if(account.getAccountNumber().equals(number)) {
-            withdraw(amount);
-        };
+    public void transferToBank(final BankAccount account,
+                               final String number,
+                               final int amount) {
+        if(!account.getAccountNumber().equals(number)){
+            throw new IllegalArgumentException("Account number does not match");
+        }
+        withdraw(amount);
+        account.deposit(amount);
 
     }
 
-    public static void validateBankID(String bankID) {
+    public static void validateBankID(final String bankID) {
         if (bankID.length() != 5) {
             throw new IllegalArgumentException("Bank ID must have exactly 5 characters");
         }
+    }
+
+    @Override
+    public String toString(){
+        return "BankAccount [accountNumber=" +
+                accountNumber + ", balance=" + balance + "]";
     }
 }
