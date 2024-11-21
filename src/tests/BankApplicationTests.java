@@ -2,6 +2,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for Bank Application.
+ *
+ * @author Dalraj Bains
+ * @author Anil Bronson
+ * @author Farzad Farzin
+ * @author Arsh Mann
+ * @version 1.0
+ */
 public class BankApplicationTests {
     private Bank bank1;
     private Bank bank2;
@@ -46,7 +55,8 @@ public class BankApplicationTests {
 
     @Test
     void addingAndRetrievingAccountFromBank() {
-        BankAccount newAccount = new BankAccount("54321", 100);
+        final BankAccount newAccount;
+        newAccount = new BankAccount("54321", 100);
         bank2.addAccount(newAccount);
         assertEquals(newAccount, bank2.retrieveAccount("54321"));
         BankAccount newAccount2 = new BankAccount("11111", 300);
@@ -56,10 +66,10 @@ public class BankApplicationTests {
 
     @Test
     void transferBetweenBankAccountsAndVerifyBalances() {
-        account1.transferToBank(account2, "12345", 200);
+        account1.transferToBank(account2, "67890", 200);
         assertEquals(800, account1.getBalanceUsd());
         assertEquals(700, account2.getBalanceUsd());
-        account2.transferToBank(account1, "67890", 100);
+        account2.transferToBank(account1, "12345", 100);
         assertEquals(900, account1.getBalanceUsd());
         assertEquals(600, account2.getBalanceUsd());
     }
