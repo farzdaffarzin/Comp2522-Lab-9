@@ -7,6 +7,7 @@ public class BankApplicationTests {
     private Bank bank2;
     private BankAccount account1;
     private BankAccount account2;
+
     @BeforeEach
     void setUp() {
         bank1 = new Bank();
@@ -16,6 +17,7 @@ public class BankApplicationTests {
         bank1.addAccount(account1);
         bank2.addAccount(account2);
     }
+
     @Test
     void depositIncreasesBalanceAndVerify() {
         account1.deposit(200);
@@ -81,9 +83,66 @@ public class BankApplicationTests {
                         bank2.retrieveAccount("00000"));
         assertEquals("Account not found", exception2.getMessage());
     }
-// Additional tests can include:
-// - Checking the initial balance correctness.
-// - Handling invalid operations.
-// - Summing balances from multiple accounts in a single bank.
-}
 
+    // Additional Tests
+    @Test
+    void cannotDepositZeroOrNegativeAmounts() {
+        IllegalArgumentException exception1 =
+                assertThrows(IllegalArgumentException.class, () -> account1.deposit(0));
+        assertEquals("Deposit amount must be positive", exception1.getMessage());
+
+        IllegalArgumentException exception2 =
+                assertThrows(IllegalArgumentException.class, () -> account1.deposit(-100));
+        assertEquals("Deposit amount must be positive", exception2.getMessage());
+    }
+
+    @Test
+    void cannotWithdrawZeroOrNegativeAmounts() {
+        IllegalArgumentException exception1 =
+                assertThrows(IllegalArgumentException.class, () -> account1.withdraw(0));
+        assertEquals("Withdrawal amount must be positive", exception1.getMessage());
+
+        IllegalArgumentException exception2 =
+                assertThrows(IllegalArgumentException.class, () -> account1.withdraw(-100));
+        assertEquals("Withdrawal amount must be positive", exception2.getMessage());
+    }
+
+    @Test
+    void cannotAddDuplicateAccountsToBank() {
+        BankAccount duplicateAccount = new BankAccount("12345", 200);
+        IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> bank1.addAccount(duplicateAccount));
+        assertEquals("Account with this number already exists", exception.getMessage());
+    }
+
+    @Test
+    void transferBetweenAccountsWithInvalidRecipientDetails() {
+        IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> account1.transferToBank(account2, "11111", 200));
+        assertEquals("Recipient account number mismatch", exception.getMessage());
+    }
+
+    @Test
+    void totalBalanceAfterMultipleTransactions() {
+        account1.deposit(500);
+        account2.withdraw(100);
+        assertEquals(1500, account1.getBalanceUsd());
+        assertEquals(400, account2.getBalanceUsd());
+        assertEquals(1900, bank1.totalBalanceUsd() + bank2.totalBalanceUsd());
+    }
+
+    @Test
+    void invalidBankIDFormatThrowsException() {
+        IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> new BankAccount("1234", 500));
+        assertEquals("Bank ID must have exactly 5 characters", exception.getMessage());
+    }
+
+    @Test
+    void totalBalanceCalculationAfterTransfers() {
+        account1.transferToBank(account2, "67890", 200);
+        assertEquals(800, account1.getBalanceUsd());
+        assertEquals(700, account2.getBalanceUsd());
+        assertEquals(1500, bank1.totalBalanceUsd() + bank2.totalBalanceUsd());
+    }
+}
