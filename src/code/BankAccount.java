@@ -23,8 +23,8 @@ public class BankAccount {
     }
 
     public void deposit(final int amount) {
-        if(amount < 0){
-            throw new IllegalArgumentException("Amount cannot be negative");
+        if(amount <= 0){
+            throw new IllegalArgumentException("Deposit amount must be positive");
         }
         balance += amount;
     }
@@ -43,17 +43,16 @@ public class BankAccount {
         balance -= amount;
     }
 
-    public void transferToBank(final BankAccount account,
-                               final String number,
-                               final int amount) {
-
-        if(!account.getAccountNumber().equals(number)){
-            throw new IllegalArgumentException("Account number does not match");
+    public void transferToBank(final BankAccount recipient,
+                               final String recipientAccountNumber,
+                               int amount) {
+        if (!recipient.getAccountNumber().equals(recipientAccountNumber)) {
+            throw new IllegalArgumentException("Recipient account number mismatch");
         }
-        withdraw(amount);
-        account.deposit(amount);
-
+        this.withdraw(amount);
+        recipient.deposit(amount);
     }
+
 
     public static void validateBankID(final String bankID) {
         if (bankID.length() != 5) {

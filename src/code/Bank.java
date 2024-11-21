@@ -9,15 +9,15 @@ public class Bank {
         accounts = new ArrayList<>();
     }
 
-    void addAccount(final BankAccount account1) {
-        //check if any account already exists with the account number
-        for(BankAccount account : accounts){
-            if(account.getAccountNumber().equals(account1.getAccountNumber())){
-                throw new IllegalArgumentException("Account already exists");
+    public void addAccount(BankAccount account) {
+        for (BankAccount acc : accounts) {
+            if (acc.getAccountNumber().equals(account.getAccountNumber())) {
+                throw new IllegalArgumentException("Account with this number already exists");
             }
         }
-        accounts.add(account1);
+        accounts.add(account);
     }
+
 
     public BankAccount retrieveAccount(String number) {
 
