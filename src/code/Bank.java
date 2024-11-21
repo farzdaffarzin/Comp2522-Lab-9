@@ -14,7 +14,9 @@ public class Bank {
     }
 
     public BankAccount retrieveAccount(String number) {
+
         BankAccount.validateBankID(number);
+
         for (BankAccount account : accounts) {
             if(account.getAccountNumber().equals(number)) {
                 return account;
@@ -24,6 +26,8 @@ public class Bank {
     }
 
     public int totalBalanceUsd() {
-        return accounts.stream().mapToInt(BankAccount::getBalance).sum();
+        return accounts.stream()
+                .mapToInt(BankAccount::getBalance)
+                .sum();
     }
 }
